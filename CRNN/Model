@@ -1,0 +1,67 @@
+# 3 Conv layer 2 Bi-LSTM
+
+# README
+# In Configuration, update the height and weight to this:
+
+H = 60
+W = 256
+# Pool = 4
+# PoolSize = 2
+# LastFilter = 256
+UnitClass = 30
+MaxInputCharLen = 24 # Max length of input character
+MaxPredictedCharLen = 64 # y_pred shape should be exactly same as this number for shape[0]
+CTCTime = MaxPredictedCharLen - 2 # (Input) CTCLoss sequence_length(0) <= CTCTIme
+TRAIN_SIZE = 30000
+VALID_SIZE = 3000
+TEST_SIZE = 100
+
+# In Handwriting IMGCrop Params, change the image dimension as h & w above
+# img = ds.crop_image(img, dim=(conf.H, conf.W))
+
+# =================== OR ============================
+
+# BISA GUNAIN SETTINGAN H,W LAMA.
+# HANYA PASTIKAN CTCTime-NY = Y_PRED SHAPE(0) - 2    
+
+# Y_PRED SHAPE BISA DILIHAT DARI MODEL ARCH -> (NONE, YPRED[0], YPRED[1]) 
+
+# train_input_len, valid_input_len = np.ones([conf.TRAIN_SIZE, 1]) * CTCTime, np.ones([conf.VALID_SIZE, 1]) * CTCTime
+   
+
+def build_model():
+    # CNN
+    conv1 = Conv2D(32, kernel_size=(3,3), padding='same', name='CONV1')(inputs)
+    conv1 = BatchNormalization()(conv1)
+    conv1 = Activation('relu')(conv1)
+    
+    pool1 = MaxPooling2D(pool_size=(2,2), name='POOL1')(conv1)
+    
+    conv2 = Conv2D(64, kernel_size=(3,3), padding='same', name='CONV2')(pool1)
+    conv2 = BatchNormalization()(conv2)
+    conv2 = Activation('relu')(conv2)
+    
+    pool2 = MaxPooling2D(pool_size=(2,2), name='POOL2')(conv2)
+    pool2 = Dropout(0.2)(pool2)
+    
+    conv3 = Conv2D(128, kernel_size=(3,3), padding='same', name='CONV3')(pool2)
+    conv3 = BatchNormalization()(conv3)
+    conv3 = Activation('relu')(conv3)
+    
+    pool3 = MaxPooling2D(pool_size=(2,1), name='POOL3')(conv3)
+    pool3 = Dropout(0.2)(pool3)
+    
+    # #RNN
+    layers = Reshape(target_shape=(64, 896))(pool3)
+    layers = Dense(64, activation='relu', name='DENSE1')(layers)
+
+    layers = Bidirectional(LSTM(128, return_sequences=True, name='LSTM'))(layers)
+    layers = Bidirectional(LSTM(128, return_sequences=True, name='LSTM2'))(layers)
+    # layers = Bidirectional(LSTM(128, return_sequences=True, name='LSTM3'))(layers)
+    
+    layers = Dense(conf.UnitClass)(layers)
+    y_pred = Activation('softmax')(layers)
+    
+    Model(inputs=inputs, outputs=y_pred).summary()
+
+    return y_pred
