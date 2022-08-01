@@ -2,7 +2,6 @@
 """
 Created on Sat Jul  2 21:31:29 2022
 
-@author: ACER
 """
 import os
 import os.path
@@ -41,19 +40,3 @@ for x in enumerate(list_form_awal):
     print (cleaned_path)
     if not os.path.exists(newpath):
         os.makedirs(newpath)
-    
-
-
-
-#for x in range(2):
-#    for y in range(10):
-#        for z in range(10):
-#            for a in range (10):
-#                folder =  str(x) + str(y) + str(z) + str(a)
-#                if folder >= nol:
-#                    break
-#                else: 
-#                    newpath = base_path + folder
-#                    print (base_path)
-#                    if not os.path.exists(newpath):
-#                        os.makedirs(newpath)
