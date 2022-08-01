@@ -2,7 +2,6 @@
 """
 Created on Tue Jul 19 09:19:38 2022
 
-@author: ASUS
 """
 # Import Module
 import os
@@ -198,28 +197,3 @@ def buatfolder(form):
 
 subset = readfilename(image_path)
 subclass = readfilename2(subset)
-#name_files = readfilename3(subclass)
-
-#chnl4,chnl5=readfilename3(list_form_awal)
-#print(chnl4)
-#print(chnl5)
-
-#print ("id_awal",list_form_awal[:10])
-#readfilename2(list_form_awal)
-#readfilename3(list_form_awal)
-#print ("id_form",list_form_end[ :10])
-#filename_split = split_filename(list_form_end)
-
-#buatfolder (list_form_end)
-
-#os.mkdir(path)
-
-
-#name = [ "Manjeet", "Nikhil", "Shambhavi", "Astha" ]
-#roll_no = [ 4, 1, 3, 2 ]
-
-#for names, rool_nos in zip(name, roll_no):
-#  print (names)
-
-
-  
